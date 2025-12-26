@@ -1,12 +1,11 @@
 const express = require("express");
 const router = express.Router();
+
 const { createUserController, deleteUserController, getAllUsersController, getUserByIDController, updateUserController} = require("../controllers/admin.controller");
 const {validarJWT} = require("../middlewares/validarJWT")
 const {check} = require("express-validator");
 const{validateInputs}= require("../middlewares/validateInputs");
 const {validarRol} = require("../middlewares/roles.middleware")
-
-
 
 
 // Ruta inicio (donde están todos los usuarios)

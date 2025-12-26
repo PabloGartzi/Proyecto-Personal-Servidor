@@ -25,17 +25,20 @@ CREATE TABLE users (
 
 CREATE TABLE jobs (
     job_id SERIAL PRIMARY KEY,
-    job_title VARCHAR(150) NOT NULL,
+    job_title VARCHAR(150) UNIQUE NOT NULL,
     job_description TEXT,
     job_status VARCHAR(20) DEFAULT 'pendiente',
-    job_type VARCHAR(100),
     job_address TEXT,
     job_latitude DECIMAL(9,6),
     job_longitude DECIMAL(9,6),
     assigned_worker_user_id INT REFERENCES users(user_id),
-    created_by_user_id INT REFERENCES users(user_id),
     job_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+DROP TABLE reports;
+DROP TABLE stock_usages;
+DROP TABLE jobs;
+
 
 
 

@@ -49,6 +49,7 @@ app.use(express.static(__dirname + '/public'))
 //RUTAS
 app.use('/',require('./routes/auth.route')); //Ruta para autenticaciones
 app.use('/admin', require('./routes/admin.route')); //Ruta para el panel de admin
+app.use('/office', require('./routes/office.route')); //Ruta para el panel de office
 
 //LISTENER
 app.listen(port, () => {

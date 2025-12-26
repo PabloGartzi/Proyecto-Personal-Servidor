@@ -68,8 +68,7 @@ const updateUser = async (id, userInfo) => {
     }
 
     client = await connection();
-    result = await client.query(adminQuerys.updateUser, [id, user_name, user_email, password_hash, role_id]
-    );
+    result = await client.query(adminQuerys.updateUser, [id, user_name, user_email, password_hash, role_id]);
     return result.rows[0];
   } catch (error) {
     console.log("Error al editar usuario:", error);
