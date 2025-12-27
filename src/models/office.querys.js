@@ -3,7 +3,7 @@ const officeQuerys = {
     getAllWorks: `SELECT j.*, u.user_name AS worker_name 
         FROM jobs AS j INNER JOIN users AS u ON j.assigned_worker_user_id = u.user_id 
         ORDER BY j.job_created_at DESC;`,
-    getWorkByID: `SELECT j.*, u.user_name AS worker_name 
+    getWorkByID: `SELECT j.*, u.user_email AS worker_email 
         FROM jobs AS j INNER JOIN users AS u ON j.assigned_worker_user_id = u.user_id 
         WHERE j.job_id = $1;`,
     createWork: `INSERT INTO jobs (job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id) 
