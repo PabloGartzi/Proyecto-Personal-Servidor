@@ -30,13 +30,16 @@ router.post(
         check("job_description")
             .notEmpty().withMessage("La descripción es obligatoria"),
         check("job_status")
-            .notEmpty().withMessage("El estado es obligatorio"),
+            .notEmpty().withMessage("El estado es obligatorio")
+            .isIn(["pendiente", "en curso", "completado"]).withMessage("Estatus no válido"),
         check("job_address")
             .notEmpty().withMessage("La dirección es obligatoria"),
         check("job_latitude")
-            .notEmpty().withMessage("La latitud es obligatoria"),
+            .notEmpty().withMessage("La latitud es obligatoria")
+            .isFloat({ min: -90, max: 90 }).withMessage("La latitud debe estar entre -90 y 90"),
         check("job_longitude")
-            .notEmpty().withMessage("La longitud es obligatoria"),
+            .notEmpty().withMessage("La longitud es obligatoria")
+            .isFloat({ min: -180, max: 180 }).withMessage("La longitud debe estar entre -180 y 180"),
         check("user_email")
             .isEmail().withMessage("Email no válido"),
         validateInputs
@@ -54,13 +57,16 @@ router.post(
         check("job_description")
             .notEmpty().withMessage("La descripción es obligatoria"),
         check("job_status")
-            .notEmpty().withMessage("El estado es obligatorio"),
+            .notEmpty().withMessage("El estado es obligatorio")
+            .isIn(["pendiente", "en curso", "completado"]).withMessage("Estatus no válido"),
         check("job_address")
             .notEmpty().withMessage("La dirección es obligatoria"),
         check("job_latitude")
-            .notEmpty().withMessage("La latitud es obligatoria"),
+            .notEmpty().withMessage("La latitud es obligatoria")
+            .isFloat({ min: -90, max: 90 }).withMessage("La latitud debe estar entre -90 y 90"),
         check("job_longitude")
-            .notEmpty().withMessage("La longitud es obligatoria"),
+            .notEmpty().withMessage("La longitud es obligatoria")
+            .isFloat({ min: -180, max: 180 }).withMessage("La longitud debe estar entre -180 y 180"),
         check("user_email")
             .isEmail().withMessage("Email no válido"),
         validateInputs

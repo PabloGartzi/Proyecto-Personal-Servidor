@@ -4,7 +4,7 @@ const { createWork, deleteWork, findWorkByTitle, findWorkerIDByEmail, getAllWork
 const getAllWorksController = async (req, res) => {
     try {
         const data = await getAllWorks()
-        console.log("<================ LOS USUARIOS QUE HAY SON: ================>", data)
+        console.log("<================ LOS TRABAJOS QUE HAY SON: ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",

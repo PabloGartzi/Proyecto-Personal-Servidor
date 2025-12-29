@@ -32,14 +32,12 @@ const getWorkByID = async (id) => {
         console.log("<==============FINAL=============>")
     }
 }
-/////////////////////////////////////////////
+
 const createWork = async (workInfo) => {
     const {job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id} = workInfo;
     console.log({job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id}, "=====================================")
     let client, result;
     try {
-        //TENEMOS QUE OBTENER EL ID DE ESE WORKER...
-
         client = await connection();
         result = await client.query(officeQuerys.createWork, [job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id]);
         
@@ -52,7 +50,6 @@ const createWork = async (workInfo) => {
     }
 };
 
-/////////////////////////////////////////////
 const updateWork = async (id, workInfo) => {
     const {job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id} = workInfo;
     let client, result;
