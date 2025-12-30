@@ -11,7 +11,12 @@ const adminQuerys = {
     WHERE user_id = $1
     RETURNING *;`,
     deleteUser: `DELETE FROM users WHERE user_id = $1 RETURNING *;`,
-    findUserByEmail: `SELECT * FROM users WHERE user_name = $1`,
+    findUserByEmail: `SELECT * FROM users WHERE user_email = $1;`,
+    totalUsers: `SELECT COUNT(*) AS total_users FROM users;`,
+    usersByRole: `SELECT r.role_id, r.role_name, COUNT(u.user_id) AS total_users
+    FROM roles AS r LEFT JOIN users AS u ON u.role_id = r.role_id
+    GROUP BY r.role_id, r.role_name
+    ORDER BY r.role_id;`
 }
 
 module.exports = {

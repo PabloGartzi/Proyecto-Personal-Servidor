@@ -107,6 +107,34 @@ const findUserByEmail = async (email) => {
     console.log("<==============CIERRE DE CONEXIÓN=============>")
   }
 }
+const totalUsers = async () => {
+  let client, result
+  try {
+    client = await connection();
+    result = await client.query(adminQuerys.totalUsers)
+    return result.rows[0] || null;
+  } catch (error) {
+    console.log("Error al buscar total de usuarios:", error);
+    return error;
+  } finally{
+    await client.end()
+    console.log("<==============CIERRE DE CONEXIÓN=============>")
+  }
+}
+const usersByRole = async () => {
+  let client, result
+  try {
+    client = await connection();
+    result = await client.query(adminQuerys.usersByRole)
+    return result.rows;
+  } catch (error) {
+    console.log("Error al buscar usuarios por rol:", error);
+    return error;
+  } finally{
+    await client.end()
+    console.log("<==============CIERRE DE CONEXIÓN=============>")
+  }
+}
 
 module.exports= {
     getAllUsers,
@@ -114,5 +142,7 @@ module.exports= {
     createUser,
     updateUser,
     deleteUser,
-    findUserByEmail
+    findUserByEmail,
+    totalUsers,
+    usersByRole
 }

@@ -1,4 +1,4 @@
-const { createWork, deleteWork, findWorkByTitle, findWorkerIDByEmail, getAllWorks, getWorkByID, updateWork } = require("../models/office.model")
+const { createWork, deleteWork, findWorkByTitle, findWorkerIDByEmail, getAllWorks, getWorkByID, updateWork, totalWorks, worksCompleted, worksInProgress, worksPending } = require("../models/office.model")
 
 
 const getAllWorksController = async (req, res) => {
@@ -134,12 +134,38 @@ const deleteWorkController = async (req, res) => {
     }
 }
 
+const statisticsController = async (req, res) => {
+    try {
+        const total = await totalWorks();
+        const completed = await worksCompleted();
+        const inProgress = await worksInProgress();
+        const pending = await worksPending();
 
+        return res.status(200).json({
+            ok: true,
+            msg: "Estadísticas obtenidas correctamente",
+            data: {
+                total_works: Number(total.total_works),
+                works_pending: Number(pending.works_pending),
+                works_in_progress: Number(inProgress.works_in_progress),
+                works_completed: Number(completed.works_completed)
+            }
+        });
+
+    } catch (error) {
+        console.error("Error en statisticsController:", error);
+        return res.status(500).json({
+        ok: false,
+        msg: "Error, contacte con el administrador"
+        });
+    }
+};
 
 module.exports = {
     getAllWorksController,
     getWorkByIDController,
     createWorkController,
     updateWorkController,
-    deleteWorkController
+    deleteWorkController,
+    statisticsController
 }

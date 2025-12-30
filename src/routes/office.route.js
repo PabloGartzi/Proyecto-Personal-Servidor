@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllWorksController, getWorkByIDController, createWorkController, updateWorkController, deleteWorkController} = require("../controllers/office.controller");
+const { getAllWorksController, getWorkByIDController, createWorkController, updateWorkController, deleteWorkController, statisticsController} = require("../controllers/office.controller");
 
 const { validarJWT } = require("../middlewares/validarJWT");
 const { validarRol } = require("../middlewares/roles.middleware");
@@ -79,5 +79,7 @@ router.delete(
     [validarJWT, validarRol(["office"])],
     deleteWorkController
 );
+
+router.get('/statistics',[validarJWT, validarRol(["office"])], statisticsController)
 
 module.exports = router;

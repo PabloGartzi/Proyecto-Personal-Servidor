@@ -20,11 +20,19 @@ const officeQuerys = {
         WHERE job_id = $1 RETURNING *;`,
     deleteWork: `DELETE FROM jobs 
         WHERE job_id = $1 RETURNING *;`,
-    findWorkByTitle: `SELECT * FROM jobs WHERE job_title ILIKE $1;`,
+    findWorkByTitle: `SELECT * FROM jobs WHERE job_title LIKE TRIM($1);`,
     findWorkerIDByEmail: `SELECT user_id 
         FROM users 
         WHERE user_email LIKE '%' || TRIM($1) || '%'
-        AND role_id = 3;`
+        AND role_id = 3;`,
+    totalWorks: `SELECT COUNT(*) AS total_works FROM jobs;`,
+    worksPending: `SELECT COUNT(*) AS works_pending
+    FROM jobs WHERE job_status = 'pendiente';`,
+    worksInProgress: `SELECT COUNT(*) AS works_in_progress
+    FROM jobs WHERE job_status = 'en curso';`,
+    worksCompleted: `SELECT COUNT(*) AS works_completed
+    FROM jobs WHERE job_status = 'completado';`
+
 };
 
 module.exports = { 

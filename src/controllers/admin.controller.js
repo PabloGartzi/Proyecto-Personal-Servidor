@@ -1,4 +1,4 @@
-const { createUser, deleteUser, findUserByEmail, getAllUsers, getUserByID, updateUser } = require("../models/admin.model")
+const { createUser, deleteUser, findUserByEmail, getAllUsers, getUserByID, updateUser, totalUsers, usersByRole } = require("../models/admin.model")
 
 
 const getAllUsersController = async (req, res) => {
@@ -115,6 +115,29 @@ const deleteUserController = async (req, res) => {
     }
 }
 
+const statisticsController = async (req, res) => {
+    try {
+        const total = await totalUsers();
+        const byRole = await usersByRole();
+
+        return res.status(200).json({
+        ok: true,
+        msg: "Estadísticas obtenidas correctamente",
+        data: {
+            total_users: Number(total.total_users),
+            users_by_role: byRole
+        }
+        });
+
+    } catch (error) {
+        console.error("Error en statisticsController:", error);
+        return res.status(500).json({
+        ok: false,
+        msg: "Error, contacte con el administrador"
+        });
+    }
+};
+
 
 
 module.exports = {
@@ -122,5 +145,6 @@ module.exports = {
     getUserByIDController,
     createUserController,
     updateUserController,
-    deleteUserController
+    deleteUserController,
+    statisticsController
 }

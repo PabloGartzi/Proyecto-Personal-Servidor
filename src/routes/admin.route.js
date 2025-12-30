@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { createUserController, deleteUserController, getAllUsersController, getUserByIDController, updateUserController} = require("../controllers/admin.controller");
+const { createUserController, deleteUserController, getAllUsersController, getUserByIDController, updateUserController, statisticsController} = require("../controllers/admin.controller");
 const {validarJWT} = require("../middlewares/validarJWT")
 const {check} = require("express-validator");
 const{validateInputs}= require("../middlewares/validateInputs");
@@ -48,5 +48,7 @@ router.post('/updateUser/:id',
 );
 //Ruta borrar usuario
 router.delete('/deleteUser/:id', [validarJWT, validarRol(["admin"])], deleteUserController)
+
+router.get('/statistics',[validarJWT, validarRol(["admin"])], statisticsController)
 
 module.exports = router;

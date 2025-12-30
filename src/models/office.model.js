@@ -43,7 +43,7 @@ const createWork = async (workInfo) => {
         
         return result.rows;
     } catch (error) {
-        console.log("Error al agregar usuario:", error);
+        console.log("Error al crear trabajo:", error);
         return error;
     } finally {
         await client.end();
@@ -58,7 +58,7 @@ const updateWork = async (id, workInfo) => {
         result = await client.query(officeQuerys.updateWork, [id, job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id]);
         return result.rows[0];
     } catch (error) {
-        console.log("Error al editar usuario:", error);
+        console.log("Error al editar trabajo:", error);
         throw error;
     } finally {
         await client.end();
@@ -109,6 +109,62 @@ const findWorkerIDByEmail = async (user_name) => {
         console.log("<==============CIERRE DE CONEXIÓN=============>")
     }
 }
+const totalWorks = async () => {
+    let client, result
+    try {
+        client = await connection();
+        result = await client.query(officeQuerys.totalWorks)
+        return result.rows[0] || null;
+    } catch (error) {
+        console.log("Error:", error);
+        return error;
+    } finally{
+        await client.end()
+        console.log("<==============CIERRE DE CONEXIÓN=============>")
+    }
+}
+const worksPending = async () => {
+    let client, result
+    try {
+        client = await connection();
+        result = await client.query(officeQuerys.worksPending)
+        return result.rows[0] || null;
+    } catch (error) {
+        console.log("Error:", error);
+        return error;
+    } finally{
+        await client.end()
+        console.log("<==============CIERRE DE CONEXIÓN=============>")
+    }
+}
+const worksInProgress = async () => {
+    let client, result
+    try {
+        client = await connection();
+        result = await client.query(officeQuerys.worksInProgress)
+        return result.rows[0] || null;
+    } catch (error) {
+        console.log("Error:", error);
+        return error;
+    } finally{
+        await client.end()
+        console.log("<==============CIERRE DE CONEXIÓN=============>")
+    }
+}
+const worksCompleted = async () => {
+    let client, result
+    try {
+        client = await connection();
+        result = await client.query(officeQuerys.worksCompleted)
+        return result.rows[0] || null;
+    } catch (error) {
+        console.log("Error:", error);
+        return error;
+    } finally{
+        await client.end()
+        console.log("<==============CIERRE DE CONEXIÓN=============>")
+    }
+}
 
 module.exports= {
     getAllWorks,
@@ -117,5 +173,9 @@ module.exports= {
     updateWork,
     deleteWork,
     findWorkByTitle,
-    findWorkerIDByEmail
+    findWorkerIDByEmail,
+    totalWorks,
+    worksPending,
+    worksInProgress,
+    worksCompleted
 }
