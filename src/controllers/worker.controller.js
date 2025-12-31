@@ -1,4 +1,4 @@
-const { getAllWorks, getWorkByID, updateWork } = require("../models/worker.model")
+const { getAllWorks, getWorkByID, updateWork, getAllReports } = require("../models/worker.model")
 
 const getAllWorksController = async (req, res) => {
     const id = req.params.id
@@ -64,11 +64,28 @@ const updateWorkController = async (req, res) => {
     }
 }
 
-
+const getAllReportsController = async (req, res) => {
+    const id = req.params.id
+    try {
+        const data = await getAllReports(id)
+        return res.status(200).json({
+            ok: true,
+            msg: "TODO OK",
+            data
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: "TODO MAL, CONTACTA CON EL ADMIN"
+        })
+    }
+}
 
 
 module.exports = {
     getAllWorksController,
     getWorkByIDController,
-    updateWorkController
+    updateWorkController,
+    getAllReportsController
 }
