@@ -42,7 +42,22 @@ const updateWork = async (id, workInfo) => {
         result = await client.query(workerQuerys.updateWork, [id, job_status]);
         return result.rows[0];
     } catch (error) {
-        console.log("Error al editar usuario:", error);
+        console.log("Error al editar el estado del trabajo:", error);
+        throw error;
+    } finally {
+        await client.end();
+    }
+};
+
+const getAllReports = async (id) => {
+    let client, result;
+    try {
+        client = await connection();
+        result = await client.query(workerQuerys.getAllReports, [id]);
+        console.log(result, "===================")
+        return result.rows;
+    } catch (error) {
+        console.log("Error al obtener los reportes:", error);
         throw error;
     } finally {
         await client.end();
@@ -55,4 +70,5 @@ module.exports= {
     getAllWorks,
     getWorkByID,
     updateWork,
+    getAllReports
 }

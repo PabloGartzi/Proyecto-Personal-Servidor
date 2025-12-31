@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllWorksController, getWorkByIDController, updateWorkController} = require("../controllers/worker.controller");
+const { getAllWorksController, getWorkByIDController, updateWorkController, getAllReportsController} = require("../controllers/worker.controller");
 
 const { validarJWT } = require("../middlewares/validarJWT");
 const { validarRol } = require("../middlewares/roles.middleware");
@@ -33,5 +33,10 @@ router.post(
     updateWorkController
 );
 
+router.get(
+    "/workReport/:id",
+    [validarJWT, validarRol(["worker"])],
+    getAllReportsController
+);
 
 module.exports = router;

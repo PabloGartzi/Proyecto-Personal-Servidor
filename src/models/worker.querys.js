@@ -9,7 +9,10 @@ const workerQuerys = {
         WHERE j.job_id = $1;`,
     updateWork: `UPDATE jobs SET 
         job_status = COALESCE($2, job_status)
-        WHERE job_id = $1 RETURNING *;`
+        WHERE job_id = $1 RETURNING *;`,
+    getAllReports: `SELECT *
+        FROM reports
+        WHERE job_id = $1`,
 };
 
 module.exports = { 
