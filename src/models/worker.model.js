@@ -54,11 +54,66 @@ const getAllReports = async (id) => {
     try {
         client = await connection();
         result = await client.query(workerQuerys.getAllReports, [id]);
-        console.log(result, "===================")
         return result.rows;
     } catch (error) {
         console.log("Error al obtener los reportes:", error);
         throw error;
+    } finally {
+        await client.end();
+    }
+};
+
+const createReport = async (job_id, worker_user_id, report_notes, report_photo_url) => {
+    let client, result;
+    try {
+        client = await connection();
+        result = await client.query(workerQuerys.createReport, [job_id, worker_user_id, report_notes, report_photo_url]);
+        return result.rows;
+    } catch (error) {
+        console.log("Error al obtener los reportes:", error);
+        throw error;
+    } finally {
+        await client.end();
+    }
+};
+
+const deleteReport = async (id) => {
+    let client, result;
+    try {
+        client = await connection();
+        result = await client.query(workerQuerys.deleteReport, [id]);
+        return result.rows[0];
+    } catch (error) {
+        console.log("Error al eliminar reporte:", error);
+        return error;
+    } finally {
+        await client.end();
+    }
+};
+
+const updateReport = async (report_id, report_notes, report_photo_url) => {
+    let client, result;
+    try {
+        client = await connection();
+        result = await client.query(workerQuerys.updateReport, [report_id, report_notes, report_photo_url]);
+        return result.rows[0];
+    } catch (error) {
+        console.log("Error al actualizar reporte:", error);
+        return error;
+    } finally {
+        await client.end();
+    }
+};
+
+const getReportById = async (report_id) => {
+    let client, result;
+    try {
+        client = await connection();
+        result = await client.query(workerQuerys.getReportById, [report_id]);
+        return result.rows[0];
+    } catch (error) {
+        console.log("Error al buscar reporte:", error);
+        return error;
     } finally {
         await client.end();
     }
@@ -70,5 +125,9 @@ module.exports= {
     getAllWorks,
     getWorkByID,
     updateWork,
-    getAllReports
+    getAllReports,
+    createReport,
+    deleteReport,
+    updateReport,
+    getReportById
 }

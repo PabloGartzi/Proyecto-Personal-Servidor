@@ -8,8 +8,8 @@ const upload = multer({ dest: "src/public/upload" });
 const saveImage = (file) => {
     const newPath = `src/public/upload/${file.originalname}`;
     fs.renameSync(file.path, newPath);
-    const publicURL = `${process.env.URL_BASE}/upload/${file.originalname}`;
-    return publicURL;
+    // const publicURL = `${process.env.URL_BASE}/upload/${file.originalname}`;
+    return file.originalname;
 }
 
 module.exports = {

@@ -112,12 +112,12 @@ const updateWorkController = async (req, res) => {
 const deleteWorkController = async (req, res) => {
     const id = req.params.id
     try {
-        const deletedUser = await deleteWork(id)
-        if (deletedUser) {
+        const deletedWork = await deleteWork(id)
+        if (deletedWork) {
             return res.status(200).json({
                 ok: true,
                 msg: "trabajo borrado",
-                deletedUser
+                deletedWork
             })
         } else {
             return res.status(404).json({

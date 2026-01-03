@@ -1,6 +1,6 @@
 const adminQuerys = {
     getDate: `SELECT NOW()`, 
-    getAllUsers: `SELECT * FROM users AS u INNER JOIN roles AS r on u.role_id = r.role_id;`,
+    getAllUsers: `SELECT * FROM users AS u INNER JOIN roles AS r on u.role_id = r.role_id ORDER BY user_created_at ASC;`,
     getUserByID: `SELECT * FROM users AS u INNER JOIN roles AS r on u.role_id = r.role_id WHERE user_id = $1;`,
     createUser: `INSERT INTO users (user_name, user_email, password_hash, role_id) VALUES (TRIM($1), TRIM($2), $3, $4) RETURNING *;`,
     updateUser: `UPDATE users SET
