@@ -108,12 +108,6 @@ const downloadReportsPDF = async (req, res) => {
     const id = req.params.id;
     try {
         const reports = await getAllReports(id);
-        // if (!reports || reports.length === 0) {
-        //     return res.status(404).json({
-        //         ok: false,
-        //         msg: "No hay reportes para este trabajo",
-        //     });
-        // }
         const doc = new PDFDocument({ margin: 50 });
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader(
@@ -237,21 +231,37 @@ const updateReportController = async (req, res) => {
 };
 
 const deleteReportController = async (req, res) => {
-    const id = req.params.id
+    const { report_id, uid } = req.params;
     try {
-        const deletedReport = await deleteReport(id)
-        if (deletedReport) {
-            return res.status(200).json({
-                ok: true,
-                msg: "reporte borrado",
-                deletedReport
-            })
-        } else {
+        const existsReport = await getReportById(report_id)
+        if (!existsReport) {
             return res.status(404).json({
                 ok: false,
                 msg: "ERROR 404, reporte no encontrado",
             })
+        } else {
+            if (uid != existsReport.worker_user_id){
+                return res.status(403).json({
+                    ok: false,
+                    msg: "ERROR 403, NO eres el creador de este reporte",
+                })
+            } else {
+                const deletedReport = await deleteReport(report_id)
+                if (deletedReport) {
+                    return res.status(200).json({
+                        ok: true,
+                        msg: "reporte borrado",
+                        deletedReport
+                    })
+                } else {
+                    return res.status(404).json({
+                        ok: false,
+                        msg: "ERROR 404, reporte no encontrado",
+                    })
+                }
+            }
         }
+
     } catch (error) {
         console.log(error)
         return res.status(500).json({

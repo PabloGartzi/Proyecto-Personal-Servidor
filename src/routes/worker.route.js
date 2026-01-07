@@ -57,7 +57,7 @@ router.post("/createReport/:job_id/:worker_user_id",[validarJWT, validarRol(["wo
 router.post("/updateReport/:report_id/:uid",[validarJWT, validarRol(["worker"]), upload.single("imagen")], updateReportController);
 
 router.delete(
-    "/deleteReport/:id",
+    "/deleteReport/:report_id/:uid",
     [validarJWT, validarRol(["worker"])],
     deleteReportController
 );
