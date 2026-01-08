@@ -34,12 +34,11 @@ const getWorkByID = async (id) => {
 }
 
 const createWork = async (workInfo) => {
-    const {job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id} = workInfo;
-    console.log({job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id}, "=====================================")
+    const {job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_email} = workInfo;
     let client, result;
     try {
         client = await connection();
-        result = await client.query(officeQuerys.createWork, [job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id]);
+        result = await client.query(officeQuerys.createWork, [job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_email]);
         
         return result.rows;
     } catch (error) {
@@ -51,11 +50,11 @@ const createWork = async (workInfo) => {
 };
 
 const updateWork = async (id, workInfo) => {
-    const {job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id} = workInfo;
+    const {job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_email} = workInfo;
     let client, result;
     try {
         client = await connection();
-        result = await client.query(officeQuerys.updateWork, [id, job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id]);
+        result = await client.query(officeQuerys.updateWork, [id, job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_email]);
         return result.rows[0];
     } catch (error) {
         console.log("Error al editar trabajo:", error);

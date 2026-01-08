@@ -1,11 +1,11 @@
 const workerQuerys = {
     getDate: `SELECT NOW();`,
     getAllWorks: `SELECT j.*
-        FROM jobs AS j INNER JOIN users AS u ON j.assigned_worker_user_id = u.user_id
-        WHERE j.assigned_worker_user_id = $1
+        FROM jobs AS j INNER JOIN users AS u ON j.assigned_worker_user_email = u.user_email
+        WHERE u.user_id = $1
         ORDER BY j.job_created_at ASC;`,
     getWorkByID: `SELECT j.*, u.user_email AS worker_email 
-        FROM jobs AS j INNER JOIN users AS u ON j.assigned_worker_user_id = u.user_id 
+        FROM jobs AS j INNER JOIN users AS u ON j.assigned_worker_user_email = u.user_email 
         WHERE j.job_id = $1;`,
     updateWork: `UPDATE jobs SET 
         job_status = COALESCE($2, job_status)

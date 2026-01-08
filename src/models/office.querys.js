@@ -1,12 +1,12 @@
 const officeQuerys = {
     getDate: `SELECT NOW();`,
-    getAllWorks: `SELECT j.*, u.user_name AS worker_name 
-        FROM jobs AS j INNER JOIN users AS u ON j.assigned_worker_user_id = u.user_id 
+    getAllWorks: `SELECT j.*, u.user_email AS worker_email
+        FROM jobs AS j INNER JOIN users AS u ON j.assigned_worker_user_email = u.user_email 
         ORDER BY j.job_created_at ASC;`,
     getWorkByID: `SELECT j.*, u.user_email AS worker_email 
-        FROM jobs AS j INNER JOIN users AS u ON j.assigned_worker_user_id = u.user_id 
+        FROM jobs AS j INNER JOIN users AS u ON j.assigned_worker_user_email = u.user_email 
         WHERE j.job_id = $1;`,
-    createWork: `INSERT INTO jobs (job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id) 
+    createWork: `INSERT INTO jobs (job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_email) 
             VALUES (TRIM($1),TRIM($2),$3,TRIM($4),$5,$6,$7) 
             RETURNING *;`,
     updateWork: `UPDATE jobs SET 
@@ -16,7 +16,7 @@ const officeQuerys = {
         job_address = COALESCE(TRIM($5), job_address), 
         job_latitude = COALESCE($6, job_latitude), 
         job_longitude = COALESCE($7, job_longitude), 
-        assigned_worker_user_id = COALESCE($8, assigned_worker_user_id) 
+        assigned_worker_user_email = COALESCE($8, assigned_worker_user_email) 
         WHERE job_id = $1 RETURNING *;`,
     deleteWork: `DELETE FROM jobs 
         WHERE job_id = $1 RETURNING *;`,

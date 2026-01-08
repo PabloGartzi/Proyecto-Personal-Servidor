@@ -50,7 +50,6 @@ const createWorkController = async (req, res) => {
         }
 
         const workerExists = await findWorkerIDByEmail(user_email);
-        console.log(workerExists, "====================================EXISTE======================================")
         if(!workerExists){
             return res.status(401).json({
                 ok:false,
@@ -58,7 +57,7 @@ const createWorkController = async (req, res) => {
             })
         }
 
-        const data = await createWork({job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id: workerExists.user_id})
+        const data = await createWork({job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_email: user_email})
         console.log("Trabajo agregado:", data);
         return res.status(201).json({
             ok: true,
@@ -87,12 +86,12 @@ const updateWorkController = async (req, res) => {
             })
         }
 
-        const newUser = await updateWork(id, {job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_id: workerExists.user_id})
-        if (newUser) {
+        const newWork = await updateWork(id, {job_title, job_description, job_status, job_address, job_latitude, job_longitude, assigned_worker_user_email: user_email})
+        if (newWork) {
             return res.status(200).json({
                 ok: true,
                 msg: "Trabajo actualizado",
-                newUser
+                newWork
             })
         } else {
             return res.status(404).json({
