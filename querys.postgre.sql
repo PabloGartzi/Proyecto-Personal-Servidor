@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS reports CASCADE;
 DROP TABLE IF EXISTS jobs CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
+DROP TABLE IF EXISTS alerts CASCADE;
 
 
 CREATE TABLE roles (
@@ -59,10 +60,6 @@ CREATE TABLE stock_usages (
     stock_usage_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-SELECT * FROM users;
-SELECT * FROM jobs;
-SELECT * FROM reports;
-SELECT * FROM reports WHERE job_id = 10;
 
 ALTER TABLE jobs
 ADD COLUMN assigned_worker_user_email VARCHAR(150);
@@ -87,8 +84,6 @@ CREATE TABLE alerts (
 );
 
 
-SELECT * FROM alerts;
-
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- 
 ALTER TABLE users
@@ -97,8 +92,6 @@ ADD COLUMN user_uuid UUID;
 UPDATE users
 SET user_uuid = uuid_generate_v4()
 WHERE user_uuid IS NULL;
-
-SELECT user_id, user_name, user_uuid FROM users;
 
 ALTER TABLE users
 ALTER COLUMN user_uuid SET NOT NULL;
@@ -171,3 +164,16 @@ ADD CONSTRAINT reports_report_uuid_unique UNIQUE (report_uuid);
 ALTER TABLE reports
 ALTER COLUMN report_uuid
 SET DEFAULT uuid_generate_v4();
+
+SELECT * FROM reports;
+
+INSERT INTO roles (role_name) VALUES
+('admin'),
+('office'),
+('worker');
+
+SELECT * FROM users;
+SELECT * FROM jobs;
+SELECT * FROM roles;
+SELECT * FROM reports;
+SELECT * FROM alerts;

@@ -200,13 +200,15 @@ const updateReportController = async (req, res) => {
 
     try {
         const existsReport = await getReportById(report_id)
+        const user = await getUserById(uid);
+
         if (!existsReport) {
             return res.status(404).json({
                 ok: false,
                 msg: "ERROR 404, reporte no encontrado",
             })
         } else {
-            if (uid != existsReport.worker_user_id){
+            if (user.user_email != existsReport.user_email){
                 return res.status(403).json({
                     ok: false,
                     msg: "ERROR 403, NO eres el creador de este reporte",
@@ -238,13 +240,14 @@ const deleteReportController = async (req, res) => {
     const { report_id, uid } = req.params;
     try {
         const existsReport = await getReportById(report_id)
+        const user = await getUserById(uid);
         if (!existsReport) {
             return res.status(404).json({
                 ok: false,
                 msg: "ERROR 404, reporte no encontrado",
             })
         } else {
-            if (uid != existsReport.worker_user_id){
+            if (user.user_email != existsReport.user_email){
                 return res.status(403).json({
                     ok: false,
                     msg: "ERROR 403, NO eres el creador de este reporte",
