@@ -1,4 +1,4 @@
-const { getAllWorks, getWorkByID, updateWork, getAllReports, createReport, deleteReport, updateReport, getReportById } = require("../models/worker.model")
+const { getAllWorks, getWorkByID, updateWork, getAllReports, createReport, deleteReport, updateReport, getReportById, getUserById } = require("../models/worker.model")
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
@@ -107,15 +107,16 @@ const getReportByIdController = async (req, res) => {
 const downloadReportsPDF = async (req, res) => {
     const id = req.params.id;
     try {
+        const work = await getWorkByID(id);
         const reports = await getAllReports(id);
         const doc = new PDFDocument({ margin: 50 });
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader(
             "Content-Disposition",
-            `attachment; filename=reportes_trabajo_${id}.pdf`
+            `attachment; filename=reportes_trabajo_${work.job_uuid}.pdf`
         );
         doc.pipe(res);
-        doc.fontSize(18).text(`Reportes del trabajo #${id}`, { align: "center" });
+        doc.fontSize(18).text(`Reportes del trabajo #${work.job_uuid}`, { align: "center" });
         doc.moveDown();
 
         const maxImageHeight = 250; // Altura máxima de la imagen
@@ -124,8 +125,8 @@ const downloadReportsPDF = async (req, res) => {
         reports.forEach((report, index) => {
             doc
                 .fontSize(12)
-                .text(`ID del reporte : ${report.report_id}`)
-                .text(`ID del trabajador: ${report.worker_user_id}`)
+                .text(`ID del reporte: ${report.report_uuid}`)
+                .text(`Trabajador: ${report.user_email}`)
                 .text(`Notas: ${report.report_notes}`)
                 .text( `Fecha: ${new Date(report.report_created_at).toLocaleString()}` );
             
@@ -173,7 +174,10 @@ const createReportController = async (req, res) => {
         if (req.file) {
             report_photo_url = saveImage(req.file);
         }
-        const data = await createReport(job_id, worker_user_id, report_notes, report_photo_url);
+        const work = await getWorkByID(job_id);
+        const user = await getUserById(worker_user_id);
+        console.log(user.user, "=====================================================")
+        const data = await createReport(job_id, worker_user_id, report_notes, report_photo_url, work.job_uuid, user.user_email);
 
         return res.status(201).json({
             ok: true,

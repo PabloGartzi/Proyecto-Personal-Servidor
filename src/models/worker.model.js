@@ -63,11 +63,11 @@ const getAllReports = async (id) => {
     }
 };
 
-const createReport = async (job_id, worker_user_id, report_notes, report_photo_url) => {
+const createReport = async (job_id, worker_user_id, report_notes, report_photo_url, job_uuid, user_email) => {
     let client, result;
     try {
         client = await connection();
-        result = await client.query(workerQuerys.createReport, [job_id, worker_user_id, report_notes, report_photo_url]);
+        result = await client.query(workerQuerys.createReport, [job_id, worker_user_id, report_notes, report_photo_url, user_email, job_uuid]);
         return result.rows;
     } catch (error) {
         console.log("Error al obtener los reportes:", error);
@@ -119,7 +119,20 @@ const getReportById = async (report_id) => {
     }
 };
 
-
+const getUserById = async (id) => {
+    let client, result
+    try {
+        client = await connection();
+        result = await client.query(workerQuerys.getUserById, [id])
+        return result.rows[0];
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    } finally{
+        await client.end()
+        console.log("<==============FINAL=============>")
+    }
+}
 
 module.exports= {
     getAllWorks,
@@ -129,5 +142,6 @@ module.exports= {
     createReport,
     deleteReport,
     updateReport,
-    getReportById
+    getReportById,
+    getUserById
 }

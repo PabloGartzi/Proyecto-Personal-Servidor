@@ -14,7 +14,7 @@ const workerQuerys = {
         FROM reports
         WHERE job_id = $1
         ORDER BY report_created_at ASC;`,
-    createReport: `INSERT INTO reports (job_id, worker_user_id, report_notes, report_photo_url) VALUES ($1, $2, $3, $4) RETURNING *;`,
+    createReport: `INSERT INTO reports (job_id, worker_user_id, report_notes, report_photo_url, user_email, job_uuid) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
     deleteReport: `DELETE FROM reports 
         WHERE report_id = $1 RETURNING *;`,
     updateReport: `UPDATE reports SET 
@@ -24,6 +24,9 @@ const workerQuerys = {
     getReportById: `SELECT *
         FROM reports
         WHERE report_id = $1;`,
+    getUserById: `SELECT *
+        FROM users
+        WHERE user_id = $1;`,
 };
 
 module.exports = { 
