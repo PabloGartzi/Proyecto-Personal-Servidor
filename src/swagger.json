@@ -1,0 +1,425 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Work Management API",
+    "version": "1.0.0",
+    "description": "Documentación API del sistema de gestión de usuarios, trabajos, reportes y alertas"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4001",
+      "description": "Servidor local"
+    }
+  ],
+  "tags": [
+    { "name": "Auth", "description": "Autenticación y tokens" },
+    { "name": "Admin", "description": "Gestión de usuarios y estadísticas" },
+    { "name": "Office", "description": "Gestión completa de trabajos" },
+    { "name": "Worker", "description": "Gestión parcial de trabajos y reportes" },
+    { "name": "Alerts", "description": "Sistema de alertas" }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login de usuario",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Login correcto, devuelve JWT" },
+          "401": { "$ref": "#/components/responses/UnauthorizedError" }
+        }
+      }
+    },
+    "/renew": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Renovar token JWT",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Token renovado" },
+          "401": { "$ref": "#/components/responses/UnauthorizedError" }
+        }
+      }
+    },
+
+    "/admin/dashboard": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Obtener todos los usuarios",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Listado de usuarios",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/User" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/dashboard/{id}": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Obtener usuario por ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Usuario encontrado" },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      }
+    },
+    "/admin/createUser": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Crear usuario",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Usuario creado" }
+        }
+      }
+    },
+    "/admin/updateUser/{id}": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Actualizar usuario",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Usuario actualizado" }
+        }
+      }
+    },
+    "/admin/deleteUser/{id}": {
+      "delete": {
+        "tags": ["Admin"],
+        "summary": "Eliminar usuario",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "204": { "description": "Usuario eliminado" }
+        }
+      }
+    },
+    "/admin/statistics": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Estadísticas del sistema",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Datos estadísticos" }
+        }
+      }
+    },
+
+    "/office/dashboard": {
+      "get": {
+        "tags": ["Office"],
+        "summary": "Obtener todos los trabajos",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Listado de trabajos" }
+        }
+      }
+    },
+    "/office/dashboard/{id}": {
+      "get": {
+        "tags": ["Office"],
+        "summary": "Obtener trabajo por ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Trabajo encontrado" }
+        }
+      }
+    },
+    "/office/createWork": {
+      "post": {
+        "tags": ["Office"],
+        "summary": "Crear trabajo",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WorkCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Trabajo creado" }
+        }
+      }
+    },
+    "/office/updateWork/{id}": {
+      "post": {
+        "tags": ["Office"],
+        "summary": "Actualizar trabajo",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WorkCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Trabajo actualizado" }
+        }
+      }
+    },
+    "/office/deleteWork/{id}": {
+      "delete": {
+        "tags": ["Office"],
+        "summary": "Eliminar trabajo",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "204": { "description": "Trabajo eliminado" }
+        }
+      }
+    },
+
+    "/worker/createReport/{job_id}/{worker_user_id}": {
+      "post": {
+        "tags": ["Worker"],
+        "summary": "Crear reporte con imagen",
+        "parameters": [
+          { "name": "job_id", "in": "path", "required": true, "schema": { "type": "integer" } },
+          { "name": "worker_user_id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": { "$ref": "#/components/schemas/ReportCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Reporte creado" }
+        }
+      }
+    },
+
+    "/alerts/send": {
+      "post": {
+        "tags": ["Alerts"],
+        "summary": "Enviar alerta",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AlertCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Alerta enviada" }
+        }
+      }
+    },
+    "/alerts/get": {
+      "get": {
+        "tags": ["Alerts"],
+        "summary": "Obtener alertas del usuario",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Listado de alertas" }
+        }
+      }
+    },
+    "/alerts/{alertId}": {
+      "delete": {
+        "tags": ["Alerts"],
+        "summary": "Eliminar alerta",
+        "parameters": [
+          { "name": "alertId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "204": { "description": "Alerta eliminada" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "password": { "type": "string" }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "user_name": { "type": "string" },
+          "user_email": { "type": "string", "format": "email" },
+          "role": { "type": "string" }
+        }
+      },
+      "UserCreate": {
+        "type": "object",
+        "required": ["user_name", "user_email", "password", "role"],
+        "properties": {
+          "user_name": { "type": "string" },
+          "user_email": { "type": "string", "format": "email" },
+          "password": { "type": "string" },
+          "role": { "type": "string", "enum": ["admin", "office", "worker"] }
+        }
+      },
+      "UserUpdate": {
+        "type": "object",
+        "required": ["user_name", "user_email", "role"],
+        "properties": {
+          "user_name": { "type": "string" },
+          "user_email": { "type": "string", "format": "email" },
+          "password": { "type": "string" },
+          "role": { "type": "string", "enum": ["admin", "office", "worker"] }
+        }
+      },
+      "WorkCreate": {
+        "type": "object",
+        "required": ["job_title", "job_description", "job_status"],
+        "properties": {
+          "job_title": { "type": "string" },
+          "job_description": { "type": "string" },
+          "job_status": {
+            "type": "string",
+            "enum": ["pendiente", "en curso", "completado"]
+          },
+          "job_address": { "type": "string" },
+          "job_latitude": { "type": "number" },
+          "job_longitude": { "type": "number" },
+          "user_email": { "type": "string", "format": "email" }
+        }
+      },
+      "ReportCreate": {
+        "type": "object",
+        "properties": {
+          "description": { "type": "string" },
+          "imagen": { "type": "string", "format": "binary" }
+        }
+      },
+      "AlertCreate": {
+        "type": "object",
+        "required": ["receiver_email", "title", "message"],
+        "properties": {
+          "receiver_email": { "type": "string", "format": "email" },
+          "title": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "example": false
+          },
+          "msg": {
+            "type": "string"
+          }
+        }
+      }   
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Token inexistente, inválido o expirado",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "ForbiddenError": {
+        "description": "El usuario no tiene permisos para acceder a este recurso",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Error interno del servidor",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "NotFoundError": {
+        "description": "Recurso no encontrado",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [{ "bearerAuth": [] }]
+}

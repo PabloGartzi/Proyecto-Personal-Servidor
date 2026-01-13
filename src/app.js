@@ -4,8 +4,8 @@ var cors = require("cors");
 const http = require("http");
 const { initSocket } = require("./socket");
 
-//const swaggerUi = require('swagger-ui-express');
-//const swaggerDocument = require('./swagger.json');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 
 const multer = require("multer");
@@ -40,7 +40,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 
-//app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //TEMPLATES
 
